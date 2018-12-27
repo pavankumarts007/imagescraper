@@ -4,45 +4,45 @@
       Sccraper
     </ion-title>
   </ion-toolbar>
-
-  <ion-row align-items-center class="crowlerform">
-
-    <ion-col>
-      <div>
-        <form [formGroup]="crowlerurl" (ngSubmit)="addForm()">
-          <ion-item>
-            <ion-label position="floating">Title :</ion-label>
-            <ion-input type="text" placeholder="Website Title" formControlName="title" name="title"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-label position="floating">Url :</ion-label>
-            <ion-input type="url" placeholder="http://abc.com" formControlName="url" name="url"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-label position="floating">Depth :</ion-label>
-            <ion-input type="number" placeholder="Depth of crawling Limited to 5" formControlName="depth" name="depth"></ion-input>
-          </ion-item>
-          <ion-button color="primary" [disabled]="!crowlerurl.valid" type="submit">Add</ion-button>
-        </form>
-      </div>
-    </ion-col>
-
-  </ion-row>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
+
+  <ion-card class="urlcard">
+  <h3 class="formError">{{formError}}</h3>
+  <form [formGroup]="crowlerurl" (ngSubmit)="addForm()">
+    <ion-item>
+      <ion-label position="floating">Title :</ion-label>
+      <ion-input type="text" placeholder="Website Title" formControlName="title" name="title"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Url :</ion-label>
+      <ion-input type="url" placeholder="http://abc.com" (ionChange)="removeError()" formControlName="url" name="url"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Depth :</ion-label>
+      <ion-input type="number" placeholder="Depth of crawling Limited to 5" formControlName="depth" name="depth"></ion-input>
+    </ion-item>
+    <ion-button color="primary" [disabled]="!crowlerurl.valid" type="submit">Add</ion-button>
+  </form>
+    </ion-card>
   
-   
-      <ion-card *ngFor="let source of sources"> 
+      <ion-card class="urlcard" *ngFor="let source of sources"> 
         <ion-card-header>
-          <ion-card-subtitle>{{source.url}}<span class="processloading"><ion-spinner *ngIf="!source.internalStatus && !source.status" name="dots"></ion-spinner></span></ion-card-subtitle>
+          <ion-card-subtitle>{{source.url}}
+            <span class="processloading">
+              <ion-spinner *ngIf="!source.internalStatus && !source.status" name="dots"></ion-spinner>
+              <ion-button fill="clear" href="results/{{source.id}}" *ngIf="source.internalStatus && source.status" ><ion-icon slot="icon-only" ios="ios-eye" md="md-eye"></ion-icon></ion-button>
+              <ion-button fill="clear" (click)="deleteContents(source)" color="danger" ><ion-icon slot="icon-only" ios="ios-trash" md="md-trash"></ion-icon></ion-button>
+            </span>
+          </ion-card-subtitle>
           <ion-card-title>{{source.title}}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-            <ion-badge color="secondary">{{source.links_count}} Links</ion-badge><ion-badge color="success">{{source.image_count}} Images</ion-badge>
+            <ion-badge color="secondary">{{source.links_count}} Links</ion-badge> 
+            <ion-badge class="imagebadge" color="success">{{source.image_count}} Images</ion-badge>
         </ion-card-content>
-        <ion-button (click)="viewContents(source.id)" color="primary">View</ion-button>
-        <ion-button (click)="deleteContents(source.id)" [disabled]="!source.internalStatus && !source.status" color="danger">Delete</ion-button>
+
       </ion-card>
  
 </ion-content>

@@ -1,9 +1,15 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>results</ion-title>
+    <ion-title>Results</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-
+    <ion-card class="urlcard" *ngFor="let source of images"> 
+        <ion-img [src]="source.url"></ion-img>
+        <ion-card-header>
+          <ion-card-subtitle>{{source.url}}</ion-card-subtitle>
+          <ion-card-title>{{source.pageUrl || source.parentUrl}}</ion-card-title>
+        </ion-card-header>
+      </ion-card>
 </ion-content>

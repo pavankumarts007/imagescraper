@@ -1,9 +1,18 @@
 .crowlerform{
     background-color: aliceblue;
 }
-.processinfo{
-    float: right;
+.urlcard{
+    max-width: 760px;
+    margin-left:auto;
+    margin-right:auto;
 }
 .processloading{
     float: right;
+}
+.imagebadge{
+    margin-left:10px; 
+}
+.formError{
+    text-align: center;
+    color: rgba(255, 0, 0, 0.747);
 }

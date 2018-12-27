@@ -9,7 +9,8 @@ import {Validators, FormBuilder, FormGroup } from '@angular/forms';
 export class HomePage implements OnInit {
   sources: Array<CrawlerUrls>;
   levels: Array<ScrapedUrls>;
-  private crowlerurl: FormGroup;
+  formError: string;
+  public crowlerurl: FormGroup;
   constructor(private api: ApiService, private formBuilder: FormBuilder) {
     this.crowlerurl = this.formBuilder.group({
     title: ['', Validators.compose([Validators.maxLength(100), Validators.required])],
@@ -28,19 +29,32 @@ export class HomePage implements OnInit {
     });
   }
   addForm() {
-    this.api.createCrawlerUrl(this.crowlerurl).subscribe((data: CrawlerUrls) => {
+    console.log(this.crowlerurl.value);
+    this.api.createCrawlerUrl(this.crowlerurl.value).subscribe((data: CrawlerUrls) => {
       console.log(data);
       this.sources.push(data) ;
+      this.formError = '';
     }, (err) => {
       console.log(err);
+      if (err.status === 400 ) {
+        if (err.error.non_field_errors.length > 0) {
+
+          this.formError = err.error.non_field_errors[0];
+
+      }
+      }
     });
+  }
+  removeError() {
+    this.formError = '';
   }
   viewContents(id) {
 
   }
-  deleteContents(id) {
-    this.api.deleteCrawlerUrl(id).subscribe((data: any) => {
+  deleteContents(source) {
+    this.api.deleteCrawlerUrl(source.id).subscribe((data: any) => {
       console.log(data);
+      this.sources.splice(this.sources.indexOf(source), 1);
     }, (err) => {
       console.log(err);
     });

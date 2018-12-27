@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface CrawlerUrls {
+  id: Number;
   title: string;
   url: string;
   depth: string;
@@ -15,6 +16,7 @@ export interface CrawlerUrls {
   links_count: Number;
 }
 export interface ScrapedUrls {
+  id: Number;
   title: string;
   parentUrl: string;
   relatedUrl: string;
@@ -25,6 +27,7 @@ export interface ScrapedUrls {
   error: string;
 }
 export interface ImageUrls {
+  id: Number;
   parentUrl: string;
   url: string;
   pageUrl: string;
@@ -43,11 +46,11 @@ export class ApiService {
   fetchScrapedUrls(): Observable<ScrapedUrls[]> {
     return <Observable<ScrapedUrls[]>>this.httpClient.get(this.dataURL + 'levels');
   }
-  fetchImageUrls(): Observable<ImageUrls[]> {
-    return <Observable<ImageUrls[]>>this.httpClient.get(this.dataURL + 'images');
+  fetchImageUrls(id): Observable<ImageUrls[]> {
+    return <Observable<ImageUrls[]>>this.httpClient.get(this.dataURL + `images?parent=${id}`);
   }
   deleteCrawlerUrl(id): Observable<any> {
-    return <Observable<any>>this.httpClient.post(this.dataURL + 'images', {id: id});
+    return <Observable<any>>this.httpClient.delete(this.dataURL + `source/?parent=${id}`);
   }
   createCrawlerUrl(data): Observable<CrawlerUrls> {
     return <Observable<CrawlerUrls>>this.httpClient.post(this.dataURL + 'source/', {url: data.url, title: data.title, depth: data.depth});
